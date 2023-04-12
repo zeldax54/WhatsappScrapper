@@ -1,0 +1,43 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.33424.131
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WhatsappScrapper", "WhatsappScrapper\WhatsappScrapper.csproj", "{13CBB60D-6E95-47C0-A882-F6386D5E642F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WhatsAppScrapper.Models", "WhatsAppScrapper.Models\WhatsAppScrapper.Models.csproj", "{E5405B3D-8AEB-4EEB-802C-FBF2170A703F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WhatsappScrapper.DataAccess", "WhatsappScrapper.DataAccess\WhatsappScrapper.DataAccess.csproj", "{7AEB21FE-67CC-4CE1-BEE3-D17A6B532D33}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WhatsappScrapper.Bussiness", "WhatsappScrapper.Bussiness\WhatsappScrapper.Bussiness.csproj", "{F8C94910-A386-421A-A79F-E0029A4AB85D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{13CBB60D-6E95-47C0-A882-F6386D5E642F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{13CBB60D-6E95-47C0-A882-F6386D5E642F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{13CBB60D-6E95-47C0-A882-F6386D5E642F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{13CBB60D-6E95-47C0-A882-F6386D5E642F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E5405B3D-8AEB-4EEB-802C-FBF2170A703F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E5405B3D-8AEB-4EEB-802C-FBF2170A703F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E5405B3D-8AEB-4EEB-802C-FBF2170A703F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E5405B3D-8AEB-4EEB-802C-FBF2170A703F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7AEB21FE-67CC-4CE1-BEE3-D17A6B532D33}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7AEB21FE-67CC-4CE1-BEE3-D17A6B532D33}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7AEB21FE-67CC-4CE1-BEE3-D17A6B532D33}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7AEB21FE-67CC-4CE1-BEE3-D17A6B532D33}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F8C94910-A386-421A-A79F-E0029A4AB85D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F8C94910-A386-421A-A79F-E0029A4AB85D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F8C94910-A386-421A-A79F-E0029A4AB85D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F8C94910-A386-421A-A79F-E0029A4AB85D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {A09A15C6-33CC-429E-9B13-7A4FF83AB95A}
+	EndGlobalSection
+EndGlobal
