@@ -3,10 +3,13 @@ using WhatsappScrapper.Bussiness.Configuration;
 using WhatsAppScrapper.Models;
 using Newtonsoft.Json;
 using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Authorization;
+using PuppeteerSharp;
 
 namespace WhatsappScrapper.Controllers
 {
 
+   
     [ApiController]
     [Route("[controller]")]
     public class WhatsappController : ControllerBase
@@ -17,12 +20,12 @@ namespace WhatsappScrapper.Controllers
             _configuration = configuration;
         }
 
-        [HttpPost("Configure")]
-        public async Task<ActionResult<ApiResponse<ConfigureResponse>>> Configure(ConfigureParams config)
+        [HttpPost("configure")]       
+        [Authorize(Policy = "AdminResource")]      
+        public async Task<ActionResult<ActionResult<ApiResponse<string>>>> Configure(ConfigureParams config)
         {
             await  _configuration.Configure(config);
             return Ok(new ApiResponse<string>(){ Data = "Success Configuration",StatusCode = 200,Success = true, ErrorMessage= ""});
-        }       
-       
+        }              
     }
 }

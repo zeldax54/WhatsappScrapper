@@ -3,13 +3,17 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.5.33424.131
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WhatsappScrapper", "WhatsappScrapper\WhatsappScrapper.csproj", "{13CBB60D-6E95-47C0-A882-F6386D5E642F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WhatsappScrapper", "WhatsappScrapper\WhatsappScrapper.csproj", "{13CBB60D-6E95-47C0-A882-F6386D5E642F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WhatsAppScrapper.Models", "WhatsAppScrapper.Models\WhatsAppScrapper.Models.csproj", "{E5405B3D-8AEB-4EEB-802C-FBF2170A703F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WhatsAppScrapper.Models", "WhatsAppScrapper.Models\WhatsAppScrapper.Models.csproj", "{E5405B3D-8AEB-4EEB-802C-FBF2170A703F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WhatsappScrapper.DataAccess", "WhatsappScrapper.DataAccess\WhatsappScrapper.DataAccess.csproj", "{7AEB21FE-67CC-4CE1-BEE3-D17A6B532D33}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WhatsappScrapper.DataAccess", "WhatsappScrapper.DataAccess\WhatsappScrapper.DataAccess.csproj", "{7AEB21FE-67CC-4CE1-BEE3-D17A6B532D33}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WhatsappScrapper.Bussiness", "WhatsappScrapper.Bussiness\WhatsappScrapper.Bussiness.csproj", "{F8C94910-A386-421A-A79F-E0029A4AB85D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WhatsappScrapper.Bussiness", "WhatsappScrapper.Bussiness\WhatsappScrapper.Bussiness.csproj", "{F8C94910-A386-421A-A79F-E0029A4AB85D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Whatsapp.Identity", "Whatsapp.Identity\Whatsapp.Identity.csproj", "{DCBBAB5C-BE41-43D0-A1C9-3D96D2DDC778}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Whatsapp.ApiConsumer", "Whatsapp.ApiConsumer\Whatsapp.ApiConsumer.csproj", "{C9AD162F-BFE6-4791-A893-F53042067DA6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +37,14 @@ Global
 		{F8C94910-A386-421A-A79F-E0029A4AB85D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F8C94910-A386-421A-A79F-E0029A4AB85D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F8C94910-A386-421A-A79F-E0029A4AB85D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DCBBAB5C-BE41-43D0-A1C9-3D96D2DDC778}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DCBBAB5C-BE41-43D0-A1C9-3D96D2DDC778}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DCBBAB5C-BE41-43D0-A1C9-3D96D2DDC778}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DCBBAB5C-BE41-43D0-A1C9-3D96D2DDC778}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C9AD162F-BFE6-4791-A893-F53042067DA6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C9AD162F-BFE6-4791-A893-F53042067DA6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C9AD162F-BFE6-4791-A893-F53042067DA6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C9AD162F-BFE6-4791-A893-F53042067DA6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

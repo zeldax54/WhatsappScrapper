@@ -1,9 +1,0 @@
-2023/04/09-17:10:50.718 a760 Creating DB C:\Users\HL\OneDrive\Escritorio\webrepo\WhatsappScrapper\WhatsappScrapper\chromiumsettings\0018137096528//userdata\Default\IndexedDB\https_web.whatsapp.com_0.indexeddb.leveldb since it was missing.
-2023/04/09-17:10:50.724 a760 Reusing MANIFEST C:\Users\HL\OneDrive\Escritorio\webrepo\WhatsappScrapper\WhatsappScrapper\chromiumsettings\0018137096528//userdata\Default\IndexedDB\https_web.whatsapp.com_0.indexeddb.leveldb/MANIFEST-000001
-2023/04/09-17:10:50.783 58c8 Level-0 table #5: started
-2023/04/09-17:10:50.786 58c8 Level-0 table #5: 7441 bytes OK
-2023/04/09-17:10:50.787 58c8 Delete type=0 #3
-2023/04/09-17:10:50.787 a760 Manual compaction at level-0 from '\x00\x01\x00\x00\x00' @ 72057594037927935 : 1 .. '\x00\x02\x00\x00\x00' @ 0 : 0; will stop at (end)
-2023/04/09-17:11:04.118 a760 Level-0 table #7: started
-2023/04/09-17:11:04.179 a760 Level-0 table #7: 1222203 bytes OK
-2023/04/09-17:11:04.186 a760 Delete type=0 #4
