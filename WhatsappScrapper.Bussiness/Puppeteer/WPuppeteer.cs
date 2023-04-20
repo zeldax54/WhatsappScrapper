@@ -1,37 +1,41 @@
-﻿using Microsoft.AspNetCore.SignalR;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.SignalR;
+using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using PuppeteerSharp;
 using System;
 using System.Net;
+using Whatsapp.ApiConsumer.Identity;
 using WhatsappScrapper.Bussiness.ClientNotifier;
 using WhatsappScrapper.Bussiness.FileStorage;
 using WhatsappScrapper.Bussiness.ImageProcessor;
+using WhatsappScrapper.DataAccess.Repositories;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace WhatsappScrapper.Bussiness.Puppeteer
 {
     public class WPuppeteer : IWPuppeteer
     {
-        /// <summary>
-        /// Configs
-        /// </summary>
-        string version = "1095492";
-        string whatsappUrl = "https://web.whatsapp.com/";
-        string userAgent = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.108 Safari/537.36";
-        int waitTimeforRegistration = 5000;
-       /// <summary>
-       /// End config
-       /// </summary>
-        
+            
         IChromiumFileManager _chromiumFileManager;
         IImageProcessor _imageProcessor;
         private readonly IHubContext<Notifier> _notifierContext;
+        private readonly IConfiguration _configuration;
+        private readonly INumberRegistrationRepository _numberRegistrationRepository;
+        private readonly IIdentityConsumer _identityConsumer;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public WPuppeteer(IChromiumFileManager chromiumFileManager, IImageProcessor imageProcessor, IHubContext<Notifier> notifierContext) 
+        public WPuppeteer(IChromiumFileManager chromiumFileManager, IImageProcessor imageProcessor,
+            IHubContext<Notifier> notifierContext, IConfiguration configuration,
+            INumberRegistrationRepository numberRegistrationRepository, IIdentityConsumer identityConsumer, IHttpContextAccessor httpContextAccessor) 
         {
             _chromiumFileManager = chromiumFileManager;
             _imageProcessor = imageProcessor;
             _notifierContext = notifierContext;
+            _configuration = configuration;
+            _numberRegistrationRepository = numberRegistrationRepository;
+            _identityConsumer = identityConsumer;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         public async Task Configure(string number) 
@@ -39,27 +43,31 @@ namespace WhatsappScrapper.Bussiness.Puppeteer
             var fileInfo = await _chromiumFileManager.PrepareFolder(number);
 
             using var browserFetcher = new BrowserFetcher();
-            await browserFetcher.DownloadAsync(version);
+            await browserFetcher.DownloadAsync(_configuration["version"]);
 
             await using var browser = await PuppeteerSharp.Puppeteer.LaunchAsync(
                 new LaunchOptions { 
                     Headless = true, 
-                    ExecutablePath = browserFetcher.GetExecutablePath(version),
+                    ExecutablePath = browserFetcher.GetExecutablePath(_configuration["version"]),
                     UserDataDir = fileInfo.UserData
                 });         
 
             await using var page = await browser.NewPageAsync();
-            await page.SetUserAgentAsync(userAgent);
+            await page.SetUserAgentAsync(_configuration["userAgent"]);
 
-            await page.GoToAsync(whatsappUrl);
-            await page.WaitForTimeoutAsync(waitTimeforRegistration);
-           
+            await page.GoToAsync(_configuration["whatsappUrl"]);
+            bool waitforselector = bool.Parse(_configuration["waitforselector"]);
+            if(waitforselector)
+              await page.WaitForSelectorAsync(_configuration["qrSelector"]);
+            else
+                await page.WaitForTimeoutAsync(int.Parse(_configuration["waitTimeforQR"]));
+
             var picPath = fileInfo.ScreenFolder + "//qrscreen.png";          
             await page.ScreenshotAsync(picPath);
             var base64 = await _imageProcessor.LoadScreenShootAsBase64(picPath);
             await _notifierContext.Clients.All.SendAsync("RegistrationQr", base64);//Send QR img to client
 
-            await page.WaitForTimeoutAsync(10000);//wait for scan qr      
+            await page.WaitForTimeoutAsync(int.Parse(_configuration["waitTimeforRegistration"]));//wait for scan qr      
            
             var picPathEnd = fileInfo.ScreenFolder + "//registrationTestscreen.png";
             await page.ScreenshotAsync(picPathEnd);
@@ -68,24 +76,35 @@ namespace WhatsappScrapper.Bussiness.Puppeteer
 
            var cookiesObject = await page.GetCookiesAsync();
            var cookiesJson = JsonConvert.SerializeObject(cookiesObject, Formatting.Indented);
-           await _chromiumFileManager.SaveCookies(fileInfo.CookiesFolder, cookiesJson, number);     
+           await _chromiumFileManager.SaveCookies(fileInfo.CookiesFolder, cookiesJson, number);
+
+           /* HttpContext httpContext = _httpContextAccessor.HttpContext;
+            string? accessToken = httpContext.Request.Headers["Authorization"].
+            ToString();*/
+            var userInfo = await  _identityConsumer.UserInfo();   
            
+            await _numberRegistrationRepository.Create(new WhatsAppScrapper.Models.DataModels.RegisterNumber() {
+            UserId = userInfo.Data.UserId,
+            UserName = userInfo.Data.UserName,
+            Number = number,
+            SettingsDir = fileInfo.DataRoot
+            });
+
            await page.CloseAsync();
            await browser.CloseAsync();
         }
-
        
         public async Task<string> LoadPage(string number)
         {
             var fileInfo = await _chromiumFileManager.PrepareFolder(number);
            
             using var browserFetcher = new BrowserFetcher();
-            await browserFetcher.DownloadAsync(version);
+            await browserFetcher.DownloadAsync(_configuration["version"]);
 
             var browser = await PuppeteerSharp.Puppeteer.LaunchAsync(new LaunchOptions
             {
                 Headless = true,
-                ExecutablePath = browserFetcher.GetExecutablePath(version),
+                ExecutablePath = browserFetcher.GetExecutablePath(_configuration["version"]),
                 UserDataDir = fileInfo.UserData
             });
 

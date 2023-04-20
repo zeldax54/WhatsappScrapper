@@ -12,5 +12,6 @@ namespace WhatsappScrapper.Bussiness.FileStorage
         public Task<ChromiunFileData> PrepareFolder(string number);
         public Task SaveCookies(string cookieDir, string cookiesJson, string number);
         public Task<string> ReadCookies(string number, string cookieDir);
+        public Task CleanBuild();
     }
 }

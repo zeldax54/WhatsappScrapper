@@ -1,8 +1,8 @@
 using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.Extensions.DependencyInjection;
+using Microsoft.EntityFrameworkCore;
 using Refit;
+using Whatsapp.ApiConsumer.HeaderHandler;
 using Whatsapp.ApiConsumer.Identity;
 using Whatsapp.Identity;
 using WhatsappScrapper.Bussiness.ChromiumFileStorage;
@@ -11,10 +11,19 @@ using WhatsappScrapper.Bussiness.Configuration;
 using WhatsappScrapper.Bussiness.FileStorage;
 using WhatsappScrapper.Bussiness.ImageProcessor;
 using WhatsappScrapper.Bussiness.Puppeteer;
+using WhatsappScrapper.DataAccess.Context;
+using WhatsappScrapper.DataAccess.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+
+builder.Services.AddSingleton(() => {
+    new ConfigurationBuilder()
+            .SetBasePath(Directory.GetCurrentDirectory())
+            .AddJsonFile("appsettings.json")
+            .Build();
+});
 
 builder.Services.AddCors(options =>
 {
@@ -51,14 +60,26 @@ builder.Services.AddTransient<IWhatsappConfiguration, WhatsappConfiguration>();
 builder.Services.AddTransient<IWPuppeteer, WPuppeteer>();
 builder.Services.AddTransient<IImageProcessor, ImageProcessor>();
 
-builder.Services.AddRefitClient<IIdentityConsumer>().ConfigureHttpClient(c => {
+builder.Services.AddTransient<AuthHeaderHandle>();
 
-    c.BaseAddress = new Uri(builder.Configuration["Authority"]); 
-});
+builder.Services.AddRefitClient<IIdentityConsumer>()
+     .ConfigureHttpClient(c => c.BaseAddress = new Uri(builder.Configuration["Authority"])).AddHttpMessageHandler<AuthHeaderHandle>();
 
 builder.Services.AddSignalR();
 
+builder.Services.AddDbContext<WhatsappDBContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("Whatsappdb")));
+builder.Services.AddTransient<INumberRegistrationRepository, NumberRegistrationRepository>();
+
+
 var app = builder.Build();
+
+/*Migration*/
+using (var scope = app.Services.CreateScope())
+{
+    var dbContext = scope.ServiceProvider.GetService<WhatsappDBContext>();
+    dbContext.Database.Migrate();
+}
+/*Migration End*/
 
 
 // Configure the HTTP request pipeline.

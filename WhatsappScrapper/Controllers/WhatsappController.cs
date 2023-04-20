@@ -26,6 +26,14 @@ namespace WhatsappScrapper.Controllers
         {
             await  _configuration.Configure(config);
             return Ok(new ApiResponse<string>(){ Data = "Success Configuration",StatusCode = 200,Success = true, ErrorMessage= ""});
-        }              
+        }
+
+        [HttpGet("cleanbuild")]
+        [Authorize(Policy = "AdminResource")]
+        public async Task<ActionResult<ActionResult<ApiResponse<string>>>> CleanBuild()
+        {
+            await _configuration.CleanBuild();
+            return Ok(new ApiResponse<string>() { Data = "Success Configuration", StatusCode = 200, Success = true, ErrorMessage = "" });
+        }
     }
 }

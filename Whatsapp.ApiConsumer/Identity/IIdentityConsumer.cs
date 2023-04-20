@@ -7,5 +7,9 @@ namespace Whatsapp.ApiConsumer.Identity
     {
         [Post("/Identity/Tokenvalidate")]
         Task<IdentityResponse<bool>> Tokenvalidate(TokenRequest request);
+
+        [Get("/User/UserInfo")]
+        [Headers("Authorization: Bearer")]
+        Task<IdentityResponse<UserInfo>> UserInfo();
     }
 }
