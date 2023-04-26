@@ -8,6 +8,8 @@ namespace WhatsAppScrapper.Models
 {
     public class ConfigureParams
     {
-        public string Number { get; set; }
+        public string Number { get; set; } = string.Empty;
+        public string WaitforQRTime { get; set; } = string.Empty;
+        public string WaitforEndTime { get; set; } = string.Empty;
     }
 }

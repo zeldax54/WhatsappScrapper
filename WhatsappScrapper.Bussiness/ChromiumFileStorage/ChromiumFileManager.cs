@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,15 +13,19 @@ namespace WhatsappScrapper.Bussiness.ChromiumFileStorage
 {
     public class ChromiumFileManager : IChromiumFileManager
     {
-        string _directory = Environment.CurrentDirectory;
+        string _directory = "";
         string _prefix = "chromiumsettings";
         private readonly IWebHostEnvironment _webHostEnvironment;
         private readonly IConfiguration _configuration;
+        private readonly ILogger<ChromiumFileManager> _logger;
 
-        public ChromiumFileManager(IWebHostEnvironment webHostEnvironment, IConfiguration configuration) 
+
+        public ChromiumFileManager(IWebHostEnvironment webHostEnvironment, IConfiguration configuration, ILogger<ChromiumFileManager> logger) 
         { 
             _webHostEnvironment = webHostEnvironment;
             _configuration = configuration;
+            _logger = logger;
+            _directory = string.IsNullOrEmpty(_configuration["chromeDataSaveRoute"]) ? Environment.CurrentDirectory : _configuration["chromeDataSaveRoute"];
         }
 
         public Task<ChromiunFileData> PrepareFolder(string number)
@@ -64,6 +69,19 @@ namespace WhatsappScrapper.Bussiness.ChromiumFileStorage
             string buildDirectory = Path.Combine(_webHostEnvironment.ContentRootPath, _configuration["subrutaChromiun"]);
             Directory.Delete(buildDirectory,true);
             await Task.CompletedTask;
+        }
+
+        public async Task RemoveConfig(string configDir)
+        {
+            try
+            {
+                Directory.Delete(configDir, true);
+                await Task.CompletedTask;
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e.Message,e);
+            }           
         }
     }
 }

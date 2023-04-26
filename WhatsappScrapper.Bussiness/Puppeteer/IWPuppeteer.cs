@@ -8,7 +8,8 @@ namespace WhatsappScrapper.Bussiness.Puppeteer
 {
     public interface IWPuppeteer
     {
-        Task Configure(string number);
+        Task Configure(string number, string waitforQR, string waitForEnd);
+        Task RemoveConfig(string configdir);
         Task<string> LoadPage(string number); 
     }
 }

@@ -10,6 +10,7 @@ using WhatsappScrapper.Bussiness.ClientNotifier;
 using WhatsappScrapper.Bussiness.Configuration;
 using WhatsappScrapper.Bussiness.FileStorage;
 using WhatsappScrapper.Bussiness.ImageProcessor;
+using WhatsappScrapper.Bussiness.Manage;
 using WhatsappScrapper.Bussiness.Puppeteer;
 using WhatsappScrapper.DataAccess.Context;
 using WhatsappScrapper.DataAccess.Repositories;
@@ -17,13 +18,6 @@ using WhatsappScrapper.DataAccess.Repositories;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
-builder.Services.AddSingleton(() => {
-    new ConfigurationBuilder()
-            .SetBasePath(Directory.GetCurrentDirectory())
-            .AddJsonFile("appsettings.json")
-            .Build();
-});
 
 builder.Services.AddCors(options =>
 {
@@ -69,6 +63,7 @@ builder.Services.AddSignalR();
 
 builder.Services.AddDbContext<WhatsappDBContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("Whatsappdb")));
 builder.Services.AddTransient<INumberRegistrationRepository, NumberRegistrationRepository>();
+builder.Services.AddSingleton<IProcessKiller, ProcessKiller>();
 
 
 var app = builder.Build();

@@ -38,7 +38,7 @@ namespace WhatsappScrapper.Bussiness.Puppeteer
             _httpContextAccessor = httpContextAccessor;
         }
 
-        public async Task Configure(string number) 
+        public async Task Configure(string number,string waitforQR,string waitForEnd) 
         {
             var fileInfo = await _chromiumFileManager.PrepareFolder(number);
 
@@ -49,7 +49,8 @@ namespace WhatsappScrapper.Bussiness.Puppeteer
                 new LaunchOptions { 
                     Headless = true, 
                     ExecutablePath = browserFetcher.GetExecutablePath(_configuration["version"]),
-                    UserDataDir = fileInfo.UserData
+                    UserDataDir = fileInfo.UserData,
+                    Args = new string[2] { "--start-maximized", "--no-sandbox" },
                 });         
 
             await using var page = await browser.NewPageAsync();
@@ -57,17 +58,19 @@ namespace WhatsappScrapper.Bussiness.Puppeteer
 
             await page.GoToAsync(_configuration["whatsappUrl"]);
             bool waitforselector = bool.Parse(_configuration["waitforselector"]);
+           
             if(waitforselector)
               await page.WaitForSelectorAsync(_configuration["qrSelector"]);
             else
-                await page.WaitForTimeoutAsync(int.Parse(_configuration["waitTimeforQR"]));
+                await page.WaitForTimeoutAsync(int.Parse(waitforQR)*1000);
+
 
             var picPath = fileInfo.ScreenFolder + "//qrscreen.png";          
             await page.ScreenshotAsync(picPath);
             var base64 = await _imageProcessor.LoadScreenShootAsBase64(picPath);
             await _notifierContext.Clients.All.SendAsync("RegistrationQr", base64);//Send QR img to client
 
-            await page.WaitForTimeoutAsync(int.Parse(_configuration["waitTimeforRegistration"]));//wait for scan qr      
+            await page.WaitForTimeoutAsync(int.Parse(waitForEnd)*1000);//wait for scan qr      
            
             var picPathEnd = fileInfo.ScreenFolder + "//registrationTestscreen.png";
             await page.ScreenshotAsync(picPathEnd);
@@ -127,6 +130,9 @@ namespace WhatsappScrapper.Bussiness.Puppeteer
             return "";
         }
 
-
+        public async Task RemoveConfig(string configdir)
+        {
+           await _chromiumFileManager.RemoveConfig(configdir);          
+        }
     }
 }
