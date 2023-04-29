@@ -23,7 +23,14 @@ namespace WhatsappScrapper.DataAccess.Repositories
 
         public async Task Create(RegisterNumber registerNumber)
         {
-            await _context.RegisterNumbers.AddAsync(registerNumber);
+            var rnList = await _context.RegisterNumbers.Where(a => a.Number == registerNumber.Number).ToListAsync();
+            foreach (var rn in rnList)
+            {
+                rn.IsActive = false;
+                _context.Update(rn);
+            }
+       
+            await _context.RegisterNumbers.AddAsync(registerNumber);           
             await _context.SaveChangesAsync();
         }
 
