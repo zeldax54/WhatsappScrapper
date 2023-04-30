@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Data;
+using System.Security.Claims;
 using Whatsapp.Bussiness.User.Manager;
 using WhatsappScrapper.Bussiness.Configuration;
 using WhatsAppScrapper.Models;
@@ -12,22 +14,62 @@ namespace WhatsappScrapper.Controllers
     public class ClientWhatsappController : ControllerBase
     {
         private readonly IZoneManager _zoneManager;
-        public ClientWhatsappController(IZoneManager zoneManager)
+        private readonly string _userId;
+        public ClientWhatsappController(IZoneManager zoneManager, IHttpContextAccessor httpContextAccessor)
         {
-            _zoneManager = zoneManager;
+            _zoneManager = zoneManager;          
+            if(httpContextAccessor.HttpContext.Request.Headers.TryGetValue("x-nameidentifier", out var userId))
+              _userId = userId;
         }
 
         [HttpPost("addzone")]
         [Authorize(Policy = "UserResource")]
         public async Task<IActionResult> Configure(Zone zone)
         {
-            if (Request.Headers.TryGetValue("x-nameidentifier", out var userId)) 
+            try
             {
-                zone.UserId = userId;
-                await _zoneManager.AddZone(zone);
-                return Ok(new ApiResponse<string>() { Data = "Success Configuration", StatusCode = 200, Success = true, ErrorMessage = "" });
+                zone.UserId = _userId;
+                int zoneId = await _zoneManager.AddZone(zone);
+                return Created(nameof(Configure), zoneId);
             }
-            return BadRequest();           
+            catch (DuplicateNameException)
+            {
+                return Conflict("Duplicate values not allowed");
+            }
+            catch (Exception)
+            {
+                return BadRequest("Something went wrong configuring zone");
+            }
+        }
+
+        [HttpGet("zones")]
+        [Authorize(Policy = "UserResource")]
+        public async Task<IActionResult> Zones()
+        {
+            try
+            {
+                var zones = await _zoneManager.GetZones(_userId);
+                return Ok(zones);
+            }
+            catch (Exception)
+            {
+                return BadRequest("Something went wrong fetching zones list");
+            }
+        }
+   
+        [HttpDelete("removezone/{zoneId}")]
+        [Authorize(Policy = "UserResource")]
+        public async Task<IActionResult> RemoveZone(int zoneId)
+        {
+            try
+            {
+                var removedId = await _zoneManager.RemoveZone(_userId,zoneId);
+                return Ok(removedId);
+            }
+            catch (Exception)
+            {
+                return BadRequest("Something went wrong fetching zones list");
+            }
         }
     }
 }
