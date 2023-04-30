@@ -30,7 +30,7 @@ namespace WhatsappScrapper.Controllers
         }
 
         [HttpGet("configurelist")]
-       // [Authorize(Policy = "AdminResource")]
+        [Authorize(Policy = "AdminResource")]
         public async Task<ActionResult<ActionResult<ApiResponse<IEnumerable<RegisterNumber>>>>> ConfigureList()
         {
             var list = await _configuration.ConfigureList();

@@ -32,6 +32,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Whatsapp.ApiConsumer\Whatsapp.ApiConsumer.csproj" />
+    <ProjectReference Include="..\Whatsapp.Bussiness.User\Whatsapp.Bussiness.User.csproj" />
     <ProjectReference Include="..\Whatsapp.Identity\Whatsapp.Identity.csproj" />
     <ProjectReference Include="..\WhatsappScrapper.Bussiness\WhatsappScrapper.Bussiness.csproj" />
     <ProjectReference Include="..\WhatsappScrapper.DataAccess\WhatsappScrapper.DataAccess.csproj" />

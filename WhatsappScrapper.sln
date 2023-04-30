@@ -11,9 +11,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WhatsappScrapper.DataAccess
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WhatsappScrapper.Bussiness", "WhatsappScrapper.Bussiness\WhatsappScrapper.Bussiness.csproj", "{F8C94910-A386-421A-A79F-E0029A4AB85D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Whatsapp.Identity", "Whatsapp.Identity\Whatsapp.Identity.csproj", "{DCBBAB5C-BE41-43D0-A1C9-3D96D2DDC778}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Whatsapp.Identity", "Whatsapp.Identity\Whatsapp.Identity.csproj", "{DCBBAB5C-BE41-43D0-A1C9-3D96D2DDC778}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Whatsapp.ApiConsumer", "Whatsapp.ApiConsumer\Whatsapp.ApiConsumer.csproj", "{C9AD162F-BFE6-4791-A893-F53042067DA6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Whatsapp.ApiConsumer", "Whatsapp.ApiConsumer\Whatsapp.ApiConsumer.csproj", "{C9AD162F-BFE6-4791-A893-F53042067DA6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Whatsapp.Bussiness.User", "Whatsapp.Bussiness.User\Whatsapp.Bussiness.User.csproj", "{4E6629BD-3192-4939-AEDD-434AD7CA3D3E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,6 +47,10 @@ Global
 		{C9AD162F-BFE6-4791-A893-F53042067DA6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C9AD162F-BFE6-4791-A893-F53042067DA6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C9AD162F-BFE6-4791-A893-F53042067DA6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4E6629BD-3192-4939-AEDD-434AD7CA3D3E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4E6629BD-3192-4939-AEDD-434AD7CA3D3E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4E6629BD-3192-4939-AEDD-434AD7CA3D3E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4E6629BD-3192-4939-AEDD-434AD7CA3D3E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

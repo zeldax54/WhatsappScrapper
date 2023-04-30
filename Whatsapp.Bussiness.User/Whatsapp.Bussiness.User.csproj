@@ -6,4 +6,9 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\WhatsappScrapper.DataAccess\WhatsappScrapper.DataAccess.csproj" />
+    <ProjectReference Include="..\WhatsAppScrapper.Models\WhatsAppScrapper.Models.csproj" />
+  </ItemGroup>
+
 </Project>

@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Refit;
 using Whatsapp.ApiConsumer.HeaderHandler;
 using Whatsapp.ApiConsumer.Identity;
+using Whatsapp.Bussiness.User.Manager;
 using Whatsapp.Identity;
 using WhatsappScrapper.Bussiness.ChromiumFileStorage;
 using WhatsappScrapper.Bussiness.ClientNotifier;
@@ -40,9 +41,15 @@ builder.Services.AddAuthorization(options =>
     {           
         policy.Requirements.Add(new AdminRoleRequirement());
     });
+    options.AddPolicy("UserResource", policy =>
+    {
+        policy.Requirements.Add(new UserRoleRequirement());
+    });
 });
 
 builder.Services.AddSingleton<IAuthorizationHandler, AdminRoleRequirementHandler>();
+builder.Services.AddSingleton<IAuthorizationHandler, UserRoleRequirementHandler>();
+
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -62,7 +69,12 @@ builder.Services.AddRefitClient<IIdentityConsumer>()
 builder.Services.AddSignalR();
 
 builder.Services.AddDbContext<WhatsappDBContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("Whatsappdb")));
+builder.Services.AddDbContext<UserDBContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("Whatsappdb")));
+
 builder.Services.AddTransient<INumberRegistrationRepository, NumberRegistrationRepository>();
+builder.Services.AddTransient<IZoneRepository, ZoneRepository>();
+builder.Services.AddTransient<IZoneManager, ZoneManager>();
+
 builder.Services.AddSingleton<IProcessKiller, ProcessKiller>();
 
 
@@ -72,7 +84,10 @@ var app = builder.Build();
 using (var scope = app.Services.CreateScope())
 {
     var dbContext = scope.ServiceProvider.GetService<WhatsappDBContext>();
+    var userContext = scope.ServiceProvider.GetService<UserDBContext>();
+
     dbContext.Database.Migrate();
+    userContext.Database.Migrate();
 }
 /*Migration End*/
 
