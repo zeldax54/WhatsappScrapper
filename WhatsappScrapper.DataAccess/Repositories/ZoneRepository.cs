@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,13 +17,18 @@ namespace WhatsappScrapper.DataAccess.Repositories
         Task<int> AddZone(Zone zone);
         Task<IEnumerable<Zone>> GetZones(string userId);
         Task<int> RemoveZone(string userId, int zoneId);
+        Task<List<Zone>> RemoveBulk(string userId,List<int> zoneIds);
     }
     public class ZoneRepository : IZoneRepository
     {
         private UserDBContext _userDBContext;
-        public ZoneRepository(UserDBContext userDBContext)
+
+        private ILogger<ZoneRepository> _logger;
+
+        public ZoneRepository(UserDBContext userDBContext, ILogger<ZoneRepository> logger)
         {
             _userDBContext = userDBContext;
+            _logger = logger;
         }
         public async Task<int> AddZone(Zone zone)
         {
@@ -40,7 +46,7 @@ namespace WhatsappScrapper.DataAccess.Repositories
         {
             return await _userDBContext.Zones.Where(z => z.UserId == userId).ToListAsync();
         }
-
+        
         public async Task<int> RemoveZone(string userId, int zoneId)
         {
             var zone = await _userDBContext.Zones.FirstOrDefaultAsync(z => z.Id == zoneId && z.UserId == userId);
@@ -49,5 +55,31 @@ namespace WhatsappScrapper.DataAccess.Repositories
             await _userDBContext.SaveChangesAsync();
             return zoneId;
         }
+
+        public async Task<List<Zone>> RemoveBulk(string userId,List<int> zoneIds)
+        {
+            var failedZones = new List<Zone>();
+            var existingZones = await _userDBContext.Zones
+                .Where(z => zoneIds.Contains(z.Id) && z.UserId == userId)
+                .ToListAsync();
+         
+            foreach(var zone in existingZones)
+            {
+                try
+                {
+                    //zone.is
+                    _userDBContext.Zones.Remove(zone);
+                    await _userDBContext.SaveChangesAsync();
+                }
+                catch(Exception e)
+                {
+                    _logger.LogError($"Zona {zone.Id}->{e.Message}");
+                   failedZones.Add(zone);                    
+                }
+            }
+
+            return failedZones;
+        }
+
     }
 }

@@ -9,6 +9,7 @@ namespace Whatsapp.Bussiness.User.Manager
         Task<int> AddZone(Zone zone);
         Task<IEnumerable<Zone>> GetZones(string userId);
         Task<int> RemoveZone(string userId, int zoneId);
+        Task<List<Zone>> BulkRemove(string userId,List<int> ids);
     }
     public class ZoneManager : IZoneManager
     {
@@ -44,6 +45,20 @@ namespace Whatsapp.Bussiness.User.Manager
             try
             {
                 return await _zoneRepository.RemoveZone(userId,zoneId);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e.Message);
+                throw;
+            }
+        }
+
+
+        public async Task<List<Zone>> BulkRemove(string userId, List<int> ids)
+        {
+            try
+            {
+                return await _zoneRepository.RemoveBulk(userId, ids);
             }
             catch (Exception e)
             {

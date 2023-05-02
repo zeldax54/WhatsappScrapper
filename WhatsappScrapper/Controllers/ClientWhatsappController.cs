@@ -68,7 +68,22 @@ namespace WhatsappScrapper.Controllers
             }
             catch (Exception)
             {
-                return BadRequest("Something went wrong fetching zones list");
+                return BadRequest("Something went wrong removing zones list");
+            }
+        }
+      
+        [HttpDelete("bulkzonedelete")]
+        [Authorize(Policy = "UserResource")]
+        public async Task<IActionResult> BulkRemove(List<int> zoneIds)
+        {
+            try
+            {
+                var failedZones = await _zoneManager.BulkRemove(_userId, zoneIds);
+                return Ok(failedZones);
+            }
+            catch (Exception)
+            {
+                return BadRequest("Something went wrong removing zones list");
             }
         }
     }
